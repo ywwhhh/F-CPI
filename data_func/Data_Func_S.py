@@ -11,10 +11,10 @@ import numpy as np
 from tqdm import tqdm
 
 
-class Data_Func_19_2(Dataset):
+class Data_Func_S(Dataset):
 
     def __init__(self, data, mode, ind):
-        super(Data_Func_19_2,self).__init__()
+        super(Data_Func_S,self).__init__()
         self.data_set = data
         self.mode = mode
         self.dict = {'Ki': 1, 'Potency': 2, 'IC50': 3, 'EC50': 4, 'Kd': 5, 'AC50': 6}
@@ -114,7 +114,7 @@ class Data_Func_19_2(Dataset):
         return self.data[index]
 
 
-def generate_batch_19_2(data_batch):
+def generate_batch_S(data_batch):
     pro_batch = []
     f_batch = []
     nf_batch = []
@@ -142,14 +142,14 @@ def generate_batch_19_2(data_batch):
     gold_batch = gold_batch.view(-1, 3)
     return pro_batch, f_batch, nf_batch, react_batch, gold_batch
 
-class Data_Func_19_2_Metric(object):
+class Data_Func_S_Metric(object):
     """
     用于单机或分布式训练的评价标准的类
     需要评价训练结果时候在每个机器中单独计算正确词数量和总词数，用distributed_sum函数把不同机器上的参数汇总到0号机器中计算最终的评价结果
     """
 
     def __init__(self, trg_pad_idx=0):
-        super(Data_Func_19_2_Metric, self).__init__()
+        super(Data_Func_S_Metric, self).__init__()
 
         self.n_word, self.n_correct = 0, 0
         self.total_loss1 = 0

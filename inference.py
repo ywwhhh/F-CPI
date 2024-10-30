@@ -10,10 +10,11 @@ import logging
 import os
 import torch.nn.functional as F
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-data_root = 'data/data24_1'
-model_name = 'Model_51_1'
-data_pre_func = 'Data_Func_18'
-pretrained_path = "experiment/Model_51_1_Data_Func_18_data18_3_Cross_Entropy_s9_MSE/2024-04-22-06-00/model_accuracy.chkpt"
+data_root = 'data/data_example'
+model_name = 'Model_S'
+data_pre_func = 'Data_Func_S'
+## path for checkpoint
+pretrained_path = "experiment/Model_S_Data_Func_S_data0_Cross_Entropy_s9_MSE/2024-04-22-06-00/model_accuracy.chkpt"
 batch_size = 1
 end_epoch = 7000
 device_ids = 0
