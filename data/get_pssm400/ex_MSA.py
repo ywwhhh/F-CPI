@@ -1,4 +1,6 @@
 import os
+
+# Proteins are saved in fasta format, and instructions for generating pssm files using psiblast are provided here
 input = '/home/ywh/blast/bin/fasta_data'
 tmp = '/home/ywh/blast/bin/tmp'
 pssm = '/home/ywh/blast/bin/pssm'

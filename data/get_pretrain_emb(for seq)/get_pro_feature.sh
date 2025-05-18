@@ -1,0 +1,2 @@
+# Provided an example of instructions directly obtained from tape for pre training encoding
+CUDA_VISIBLE_DEVICES=1,2,3 tape-embed transformer /home/ywh/Flourine_SMILE/data/data7/train_pro.fasta /home/ywh/Flourine_SMILE/data/data7/train_pro_feature.npz bert-base --batch_size=40

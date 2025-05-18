@@ -5,7 +5,7 @@ import torch
 from utils import ScheduledOptim, get_output_dir, set_logger, Pre_data, train_epoch_label, valid_epoch_label,test_epoch_label
 import timeit
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 import logging
 from torch.utils.tensorboard import SummaryWriter
 import torch.distributed as dist
@@ -30,7 +30,9 @@ def set_seed(seed):
 def train():
 
     pre_train = None
+    ##['F_CPI_GCN','F_CPI_GAT','F_CPI_S','F_CPI_M']
     model_name = 'F_CPI_M'
+    ##['Data_Func_G','Data_Func_S','Data_Func_M']
     data_pre_func = 'Data_Func_M'
     data_root = 'data0'
     criterion_name_1 = 'Cross_Entropy_s9'

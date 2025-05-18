@@ -1,6 +1,9 @@
 from rdkit import Chem
 import rdkit
 import networkx as nx
+
+# This document demonstrates the logical process of processing a sequence dataset into graph feature inputs
+
 #############进一步处理,n编号9
 
 # mol_f = Chem.SDMolSupplier('data/pos/ff')

@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 class Data_Func_S(Dataset):
 
-    def __init__(self, data, mode, ind):
+    def __init__(self, data, mode, ind,whole):
         super(Data_Func_S,self).__init__()
         self.data_set = data
         self.mode = mode
@@ -26,8 +26,8 @@ class Data_Func_S(Dataset):
 
             self.data = self.process_inf()
         else:
-            self.pro = np.load('data/all_pro_feature_full.npz', allow_pickle=True)
-            self.mol = np.load('data/data' + ind + '/' + mode + '_full_emb.npz', allow_pickle=True)
+            self.pro = np.load('data/data0/all_pro_feature_full.npz', allow_pickle=True)
+            self.mol = np.load('data/data0/' + mode + '_full_emb.npz', allow_pickle=True)
             self.data = self.process()
 
 

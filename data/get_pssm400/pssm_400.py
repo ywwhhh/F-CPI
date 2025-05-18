@@ -1,5 +1,7 @@
 import os
 import numpy as np
+
+# This file converts pssm to pssm-400 based on ex_SSA.py
 path = '/mnt/sda/blast/bin/pssm'
 anji = ['A','R','N','D','C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V']
 dict = {}

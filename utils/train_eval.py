@@ -9,8 +9,8 @@ from torch.nn.utils.rnn import pad_sequence
 
 
 DATA_FUNCS_COMPOUND= []
-DATA_FUNCS = ['Data_Func_S','Data_Func_G']
-DATA_FUNCS_EMB = ['Data_Func_S_pre']
+DATA_FUNCS = ['Data_Func_M','Data_Func_G']
+DATA_FUNCS_EMB = ['Data_Func_S']
 
 
 

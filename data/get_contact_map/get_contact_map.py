@@ -2,6 +2,8 @@ from Bio.PDB.PDBParser import PDBParser
 import os
 import numpy as np
 
+# The source file comes from the pdbs suffix file of the protein, such as uniprot or alphafold database
+
 path = '/home/ywh/pdbs'
 parser = PDBParser()
 dict = {}
