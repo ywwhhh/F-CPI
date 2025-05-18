@@ -1,4 +1,4 @@
-
+''' Define the Transformer model '''
 import torch
 import torch.nn as nn
 import numpy as np
@@ -7,8 +7,10 @@ from .SubLayers import MultiHeadAttention,PositionwiseFeedForward
 import  torch.nn.functional as F
 from torch.nn import Sequential, Linear, ReLU
 from torch.autograd import Variable
+from collections import OrderedDict
 
 
+__author__ = "Yu-Hsiang Huang"
 
 import torch
 from torch.nn.utils.rnn import pad_sequence
@@ -65,13 +67,12 @@ class Encoder_p(nn.Module):
 
         super().__init__()
 
-        self.src_word_emb = nn.Embedding(n_src_vocab, d_word_vec, padding_idx=pad_idx)
-        self.position_enc = PositionalEncoding(d_word_vec, n_position=n_position)
+        self.emb = nn.Linear(768, 512, bias=False)
         self.dropout = nn.Dropout(p=dropout)
         self.layer_stack = nn.ModuleList([
             EncoderLayer(d_model, d_inner, n_head, d_k, d_v, dropout=dropout)
             for _ in range(n_layers)])
-        self.layer_norm = nn.LayerNorm(d_model, eps=1e-6)
+
         self.scale_emb = scale_emb
         self.d_model = d_model
 
@@ -80,11 +81,7 @@ class Encoder_p(nn.Module):
         enc_slf_attn_list = []
 
         # -- Forward
-        enc_output = self.src_word_emb(src_seq)
-        if self.scale_emb:
-            enc_output *= self.d_model ** 0.5
-        enc_output = self.dropout(self.position_enc(enc_output))
-        enc_output = self.layer_norm(enc_output)
+        enc_output = self.emb(src_seq)
 
         for enc_layer in self.layer_stack:
             enc_output = enc_layer(enc_output, slf_attn_mask=src_mask)
@@ -102,13 +99,12 @@ class Encoder(nn.Module):
 
         super().__init__()
 
-        self.src_word_emb = nn.Embedding(n_src_vocab, d_word_vec, padding_idx=pad_idx)
-        self.position_enc = PositionalEncoding(d_word_vec, n_position=n_position)
+        self.emb = nn.Linear(384, 512, bias=False)
         self.dropout = nn.Dropout(p=dropout)
         self.layer_stack = nn.ModuleList([
             EncoderLayer(d_model, d_inner, n_head, d_k, d_v, dropout=dropout)
             for _ in range(n_layers)])
-        self.layer_norm = nn.LayerNorm(d_model, eps=1e-6)
+
         self.scale_emb = scale_emb
         self.d_model = d_model
 
@@ -117,11 +113,7 @@ class Encoder(nn.Module):
         enc_slf_attn_list = []
 
         # -- Forward
-        enc_output = self.src_word_emb(src_seq)
-        if self.scale_emb:
-            enc_output *= self.d_model ** 0.5
-        enc_output = self.dropout(self.position_enc(enc_output))
-        enc_output = self.layer_norm(enc_output)
+        enc_output = self.emb(src_seq)
 
         for enc_layer in self.layer_stack:
             enc_output = enc_layer(enc_output, slf_attn_mask=src_mask)
@@ -192,7 +184,7 @@ class Transformer(nn.Module):
             d_word_vec=512, d_model=512, d_inner=2048,
             n_layers_e=3, n_layers_d=3, n_gin_layers=2, n_head=8, d_k=64, d_v=64, dropout=0.1, n_position=1024,
             trg_emb_prj_weight_sharing=False, emb_src_trg_weight_sharing=False,
-            scale_emb_or_prj='prj'):
+            scale_emb_or_prj='prj',from_pre=None,pre_train=None):
 
         super().__init__()
 
@@ -238,6 +230,16 @@ class Transformer(nn.Module):
         for p in self.parameters():
             if p.dim() > 1:
                 nn.init.kaiming_uniform_(p)
+        if from_pre:
+            checkpoint = torch.load(from_pre, map_location=torch.device('cpu'))
+
+            state_dict = checkpoint['model']
+            new_state_dict = OrderedDict()
+            for k, v in state_dict.items():
+                if k[:7] == 'module.':
+                    name = k[7:]  # remove `module.model.`，表面从第7个key值字符取到最后一个字符，正好去掉了module.
+                    new_state_dict[name] = v  # 新字典的key值对应的value为一一对应的值。
+            self.load_state_dict(new_state_dict)
 
         assert d_model == d_word_vec, \
         'To facilitate the residual connections, \
@@ -261,9 +263,9 @@ class Transformer(nn.Module):
         f_seq = f_all
         nf_seq = nf_all
         pro_seq = pro_all
-        pro_mask = get_pad_mask(pro_seq, self.trg_pad_idx)
-        f_mask = get_pad_mask(f_seq, self.trg_pad_idx)
-        nf_mask = get_pad_mask(nf_seq, self.trg_pad_idx)
+        pro_mask = get_pad_mask(pro_seq.sum(-1), self.trg_pad_idx)
+        f_mask = get_pad_mask(f_seq.sum(-1), self.trg_pad_idx)
+        nf_mask = get_pad_mask(nf_seq.sum(-1), self.trg_pad_idx)
         #print("encoder input shape:",src_seq.shape,src_mask.shape)#(N,S) (N,1,S)
         #enc_output = self.encoder(pro_seq, pro_mask)
         enc_output = self.encoder_p(pro_seq,pro_mask)

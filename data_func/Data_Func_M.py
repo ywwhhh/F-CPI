@@ -30,9 +30,9 @@ class Data_Func_M(Dataset):
                         open('data/data' + ind + '/mol_' + mode)]
             self.data = self.process_inf()
         else:
-            self.pro = np.load('data/all_pro_feature.npz', allow_pickle=True)
-            self.pssm = np.load('data/pssm_400.npz',allow_pickle=True)
-            self.mol = [token.strip().split('_') for token in open('data/data'+ind+'/mol_'+mode)]
+            self.pro = np.load('data/data0/all_pro_feature.npz', allow_pickle=True)
+            self.pssm = np.load('data/data0/pssm_400.npz',allow_pickle=True)
+            self.mol = [token.strip().split('_') for token in open('data/data0/mol_'+mode)]
             self.data = self.process()
 
 

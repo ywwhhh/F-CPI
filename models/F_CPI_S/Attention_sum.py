@@ -1,9 +1,10 @@
-
+''' Define the sublayers in encoder/decoder layer '''
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from .Modules import ScaledDotProductAttention
 import torch
+__author__ = "Yu-Hsiang Huang"
 
 class Attention_sum(nn.Module):
     ''' Multi-Head Attention module '''

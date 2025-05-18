@@ -14,13 +14,13 @@ import numpy as np
 
 class Data_Func_G(Dataset):
 
-    def __init__(self, data, mode, ind):
+    def __init__(self, data, mode, ind,whole):
         super(Data_Func_G,self).__init__()
         self.data_set = data
         self.mode = mode
         self.dict = {'Ki': 1, 'Potency': 2, 'IC50': 3, 'EC50': 4, 'Kd': 5, 'AC50': 6}
-        self.pro = np.load('data/contact_map.npz', allow_pickle=True)
-        self.mol = [token.strip().split('_') for token in open('data/data'+ind+'/'+mode+'_graph')]
+        self.pro = np.load('data/data0/contact_map.npz', allow_pickle=True)
+        self.mol = [token.strip().split('_') for token in open('data/data0/'+mode+'_graph')]
         self.data = self.process()
 
 
