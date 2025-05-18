@@ -5,6 +5,12 @@ This codebase provides:
 1. Models of the four modes of F-CPI
 3. The optimization algorithm that could design F-substituted SMILES with high activities for target protein
 
+## 2025/5/19
+1. We have published the preprocessed dataset on Kaggle:https://www.kaggle.com/datasets/yinwenhai/f-cpi-dataset/data
+2. Move the files in the data0 directory of F-CPI_data to the project directory where train.by can be run
+3. For F-CPI-S, due to the involvement of pre training of other existing models and the large file size, we have provided a way to obtain pre training embeddings in this update (data/get_ pretrain_ emb (for seq))
+4. We provide a way to preprocess all data in order to introduce proteins and molecules from outside the dataset for testing. （data/get_xxxx）
+5. Modified some paths and adaptation code to ensure the normal operation of the project, which may require cloning the repository again
 ## Contents
 1. [Introduction](#introduction)
 2. [Environment Setup](#environment-setup)
@@ -30,6 +36,8 @@ To investigate the effect of F-substitution on the bioactivity changes of small 
 - Python 3.6.12
 - PyTorch 1.10.2
 - CUDA 11.3  if you need train deep learning model with gpu.
+- tqdm,numpy
+- rdkit,networkx...(If you wish to perform data preprocessing)
 
 **Steps of using F-CPI:**
 1. Install [Git](https://git-scm.com/), this step is optional if you does not install DeepSEED by git clone. Clone the source codes with git. 
@@ -43,7 +51,6 @@ To investigate the effect of F-substitution on the bioactivity changes of small 
     ```
     conda create -n fcpi python=3.6.12
     conda activate fcpi
-    pip install -r requirements.txt
     ```
     To boost download speeds, you could setup pip mirror such as
     ```
